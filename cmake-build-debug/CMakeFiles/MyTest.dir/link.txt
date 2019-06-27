@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/MyTest.dir/samples/simple_add.cpp.o  -o MyTest -Wl,-rpath,/usr/local/computecpp/lib: /usr/local/computecpp/lib/libComputeCpp.so /usr/lib/x86_64-linux-gnu/libOpenCL.so 

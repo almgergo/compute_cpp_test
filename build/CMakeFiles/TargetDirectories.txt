@@ -1,0 +1,3 @@
+/home/almasy/CLionProjects/MyTest/build/CMakeFiles/rebuild_cache.dir
+/home/almasy/CLionProjects/MyTest/build/CMakeFiles/MyTest.dir
+/home/almasy/CLionProjects/MyTest/build/CMakeFiles/edit_cache.dir

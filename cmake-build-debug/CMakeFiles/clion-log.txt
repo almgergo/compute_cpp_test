@@ -1,0 +1,7 @@
+/home/almasy/Downloads/CLion-2019.1.4/clion-2019.1.4/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/almasy/CLionProjects/MyTest
+-- platform - your system can support ComputeCpp
+-- compute++ flags - -O2;-mllvm;-inline-threshold=1000;-intelspirmetadata;-sycl-target;spir64
+/home/almasy/CLionProjects/MyTest/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/almasy/CLionProjects/MyTest/cmake-build-debug

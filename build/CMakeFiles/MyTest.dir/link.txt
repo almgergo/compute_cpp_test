@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/MyTest.dir/samples/simple_add.cpp.o  -o MyTest 

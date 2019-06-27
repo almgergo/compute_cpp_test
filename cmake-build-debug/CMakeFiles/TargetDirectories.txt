@@ -1,0 +1,8 @@
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/install/strip.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/install/local.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/MyTest_simple_add.cpp_0_ih.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/MyTest.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/install.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/almasy/CLionProjects/MyTest/cmake-build-debug/CMakeFiles/list_install_components.dir

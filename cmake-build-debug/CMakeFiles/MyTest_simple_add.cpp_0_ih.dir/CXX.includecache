@@ -6,11 +6,27 @@
 
 #IncludeRegexTransform: 
 
+/home/almasy/CLionProjects/MyTest/core/model/Particle.h
+
 /home/almasy/CLionProjects/MyTest/samples/simple_add.cpp
 CL/sycl.hpp
 -
+random
+-
+algorithm
+-
+iterator
+-
 iostream
 -
+chrono
+-
+functional
+-
+unistd.h
+-
+../core/model/Particle.h
+/home/almasy/CLionProjects/MyTest/core/model/Particle.h
 
 /usr/local/computecpp/include/CL/sycl.hpp
 ../SYCL/sycl.hpp

@@ -28,17 +28,42 @@
 
 #include <CL/sycl.hpp>
 
+#include <random>
+#include <algorithm>
+#include <iterator>
 #include <iostream>
+#include <chrono>
+#include <functional>
+#include <unistd.h>
+
+#include "../core/model/Particle.h"
 
 using namespace cl::sycl;
 
 class multiply;
 
-int main() {
-    const size_t array_size = 4;
 
-    std::array<cl_int, array_size> A{{1, 2, 3, 4}}, B{{1, 2, 3, 4}}, C{{0, 0, 0, 0}};
+const size_t N = 10000000;
 
+void vector_addition_regular(std::vector<cl_int> vector, std::vector<cl_int> vector1, std::vector<cl_int> vector2);
+
+void create_vectors(std::vector<cl_int> &A, std::vector<cl_int> &B) {
+    std::random_device rnd_device;
+    // Specify the engine and distribution.
+    std::mt19937 mersenne_engine{rnd_device()};  // Generates random integers
+    std::uniform_int_distribution<int> dist{1, 100};
+
+    auto gen = [&dist, &mersenne_engine]() {
+        return dist(mersenne_engine);
+    };
+
+    std::generate(begin(A), end(A), gen);
+    std::generate(begin(B), end(B), gen);
+}
+
+void vector_addition_sycl(std::vector<cl_int> &A, std::vector<cl_int> &B, std::vector<cl_int> C) {
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     /* The scope we create here defines the lifetime of the buffer object, in SYCL
      * the lifetime of the buffer object dictates synchronization using RAII. */
@@ -51,11 +76,10 @@ int main() {
          * more devices. We construct this buffer with the address of the data
          * defined above and a range specifying a single element. */
 
-        buffer<cl_int, 1> buffA(A.data(), range<1>(array_size));
-        buffer<cl_int, 1> buffB(B.data(), range<1>(array_size));
-        buffer<cl_int, 1> buffC(C.data(), range<1>(array_size));
+        buffer<cl_int, 1> buffA(A.data(), range<1>(N));
+        buffer<cl_int, 1> buffB(B.data(), range<1>(N));
+        buffer<cl_int, 1> buffC(C.data(), range<1>(N));
 
-        std::cout << myQueue.get_device().get_info<cl::sycl::info::device::max_compute_units>() << std::endl;
 
         myQueue.submit([&](handler &cgh) {
             /* We define accessors for requiring access to a buffer on the host or on
@@ -75,8 +99,7 @@ int main() {
                 accC[id] = accA[id] + accB[id];
             };
 
-            std::cout << "Range size: " << range<1>(array_size).size() << std::endl;
-            cgh.parallel_for<class multiply>(range<1>(array_size), kern);
+            cgh.parallel_for<class multiply>(range<1>(N), kern);
         });
 
         /* queue::wait() will block until kernel execution finishes,
@@ -85,9 +108,46 @@ int main() {
 
     }
 
-    for (int i = 0; i < array_size; i++) {
-        std::cout << C[i] << " ";
-    }
-    std::cout << std::endl;
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << "sycl duration: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count() * 0.000001 << "ms"
+              << std::endl;
 
+}
+
+
+int main() {
+//    float4 a = {1.0, 2.0, 3.0, 4.0};
+//    Particle<float4> particle = Particle<float4>(a, a, a);
+//
+//    particle.move(0.1);
+//    std::cout <<
+//              particle.getPosition().x() << " " <<
+//              particle.getPosition().y() << " " <<
+//              particle.getPosition().z() << " " <<
+//              particle.getPosition().w() << " " <<
+//              std::endl;
+
+    std::vector<cl_int> A(N);
+    std::vector<cl_int> B(N);
+    std::vector<cl_int> C(N);
+    create_vectors(A, B);
+
+
+    vector_addition_regular(A, B, C);
+    usleep(2000000);
+    vector_addition_sycl(A, B, C);
+}
+
+void vector_addition_regular(std::vector<cl_int> A, std::vector<cl_int> B, std::vector<cl_int> C) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < N; i++) {
+        C[i] = (A[i] * A[i] + B[i] * B[i]) / 1.27 * (A[i] - A[i] / B[i] + B[i]) / (A[i] + A[i] - B[i] / B[i]);
+    }
+
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << "regular duration: "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start).count() * 0.000001 << "ms"
+              << std::endl;
 }
